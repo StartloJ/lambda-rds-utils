@@ -8,6 +8,12 @@ Utility tools helper for automate some activity with AWS resources
 2. Go binary; version 1.18 and up
 3. Pre commit; installation [here](https://pre-commit.com/#installation)
 
+## Current feature
+
+Now we limit Event of focus on RDS below. you can see more detail [here](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.Messages.html)
+
+1. `RDS-EVENT-0042`: Manual snapshot created.
+
 ## Required ENV config
 
 - `OPT_SRC_REGION`: Insert source region of your snapshot created.

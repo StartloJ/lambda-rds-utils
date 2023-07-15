@@ -1,0 +1,30 @@
+version: "3"
+
+env:
+  BINARY_NAME: "hello"
+  GOOS: "linux"
+  GOARCH: "amd64"
+  CGO_ENABLED: "0"
+  AWS_PROFILE: "opsta-c3i"
+  S3_NAME: "lambda-lake20230713150326612800000001"
+  VERSION: "beta"
+
+tasks:
+  default:
+    cmds:
+      - task --list
+    silent: true
+
+  # Use to build and compress file into the Zip format
+  build:
+    cmds:
+      - go build -o $BINARY_NAME main.go
+      - defer: { task: clean }
+      - zip lambda-$BINARY_NAME.zip $BINARY_NAME
+
+  upload:lambda:
+    cmds:
+      - aws s3api put-object --bucket $S3_NAME --key lambda-$BINARY_NAME.zip --body ./lambda-$BINARY_NAME.zip
+
+  # Cleaning build result
+  clean: rm $BINARY_NAME

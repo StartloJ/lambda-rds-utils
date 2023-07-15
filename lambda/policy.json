@@ -1,0 +1,27 @@
+{
+    "Statement":
+    [
+      {
+        "Sid": "AllowLambdaAccessToRdsSnapshot",
+        "Action": [
+          "rds:CopyDBSnapshot",
+          "rds:ModifyDBSnapshot",
+          "rds:DescribeDBSnapshots",
+          "rds:ModifyDBSnapshotAttribute"
+        ],
+        "Resource": ["*"],
+        "Effect": "Allow"
+      },
+      {
+        "Sid": "AllowLambdaAccessToKMSKey",
+        "Action": [
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:ReEncrypt*",
+          "kms:GenerateDataKey*"
+        ],
+        "Resource": ["*"],
+        "Effect": "Allow"
+      }
+    ]
+}

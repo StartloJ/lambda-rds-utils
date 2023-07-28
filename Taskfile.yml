@@ -6,7 +6,7 @@ env:
   GOARCH: "amd64"
   CGO_ENABLED: "0"
   AWS_PROFILE: "opsta-c3i"
-  S3_NAME: "lambda-lake20230713150326612800000001"
+  S3_NAME: "lambda-lake-20230713150326612800000001"
   VERSION: "beta"
 
 tasks:

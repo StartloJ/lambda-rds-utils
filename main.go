@@ -66,6 +66,8 @@ func ListAllSnapshot(svc *rds.RDS) ([]string, error) {
 	return snapShotName, nil
 }
 
+// Request to AWS RDS API for create event copy a specific snapshot
+// into across region and encrypt it by KMS key multi-region
 func CopySnapshotToTarget(svc *rds.RDS, snap string) (string, error) {
 	targetSnapArn := strings.Split(snap, ":")
 	targetSnapName := targetSnapArn[len(targetSnapArn)-1]
@@ -103,6 +105,10 @@ func ConvertToString(value interface{}) string {
 	return fmt.Sprintf("%v", value)
 }
 
+// this func use to remove duplicate name source if found in target
+// you shouldn't switch position input to this func.
+// `t` is mean a target that use double check to `s`
+// it will remove a value in `s` if found it in `t`
 func GetUniqueSnapShots(t, s []string) ([]string, error) {
 	//Create a map to keep track a unique strings
 	uniqueMap := make(map[string]bool)
@@ -139,6 +145,7 @@ func HandlerEvents(event BridgeEvent) error {
 		},
 	}))
 
+	// This condition will processing if the event is DB snapshot created.
 	if event.Detail.EventID == "RDS-EVENT-0042" {
 		targetSvc := rds.New(sess)
 		rep_dbSnapshots, err := ListAllSnapshot(targetSvc)

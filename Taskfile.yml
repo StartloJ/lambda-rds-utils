@@ -5,8 +5,6 @@ env:
   GOOS: "linux"
   GOARCH: "amd64"
   CGO_ENABLED: "0"
-  AWS_PROFILE: "opsta-c3i"
-  S3_NAME: "lambda-lake-20230713150326612800000001"
   VERSION: "beta"
 
 tasks:
@@ -24,7 +22,10 @@ tasks:
 
   upload:lambda:
     cmds:
-      - aws s3api put-object --bucket $S3_NAME --key lambda-$BINARY_NAME.zip --body ./lambda-$BINARY_NAME.zip
+      - aws s3api put-object --bucket {{.S3_BUCKET_NAME}} --key lambda-$BINARY_NAME.zip --body ./lambda-$BINARY_NAME.zip
+    vars:
+      S3_BUCKET_NAME:
+        sh: aws s3api list-buckets --query 'Buckets[0].Name' --output text
 
   # Cleaning build result
   clean: rm $BINARY_NAME

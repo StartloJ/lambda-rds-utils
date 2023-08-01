@@ -7,9 +7,6 @@ module "eventbridge" {
     orders = local.rds_events
   }
 
-  # attach_lambda_policy = true
-  # lambda_target_arns   = ["${aws_lambda_function.rds_snap.arn}"]
-
   targets = {
     orders = [
       {

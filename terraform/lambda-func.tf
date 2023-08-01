@@ -23,6 +23,33 @@ data "aws_iam_policy_document" "allow_logging" {
   }
 }
 
+data "aws_iam_policy_document" "allow_copy_rds_snapshot" {
+  policy_id = "AllowLambdaCopyRdsSnapshot"
+  statement {
+    effect = "Allow"
+    sid = "AllowLambdaAccessToRdsSnapshot"
+    actions = [
+      "rds:CopyDBSnapshot",
+      "rds:ModifyDBSnapshot",
+      "rds:DescribeDBSnapshots",
+      "rds:ModifyDBSnapshotAttribute"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid = "AllowLambdaAccessToKMSKey"
+    effect = "Allow"
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*"
+    ]
+    resources = ["${aws_kms_key.rds_snap.arn}"]
+  }
+}
+
 resource "aws_iam_policy" "lambda_logging" {
   name   = "lambda-logging-cloudwatch"
   policy = data.aws_iam_policy_document.allow_logging.json

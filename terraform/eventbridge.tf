@@ -2,18 +2,13 @@ module "eventbridge" {
   source  = "terraform-aws-modules/eventbridge/aws"
   version = "2.3.0"
 
-  bus_name = "rds-bus"
+  bus_name = local.bus_name
   rules = {
-    orders = {
-      description = "Capture for RDS snapshot event"
-      event_pattern = jsonencode({
-        "source" : ["aws.rds", "demo.event"]
-      })
-    }
+    orders = local.rds_events
   }
 
-  attach_lambda_policy = true
-  lambda_target_arns   = ["${aws_lambda_function.rds_snap.arn}"]
+  # attach_lambda_policy = true
+  # lambda_target_arns   = ["${aws_lambda_function.rds_snap.arn}"]
 
   targets = {
     orders = [
